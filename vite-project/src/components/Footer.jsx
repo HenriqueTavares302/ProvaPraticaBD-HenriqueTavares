@@ -1,12 +1,9 @@
-export default function Footer({ nomeAluno, ano }) {
-  return (
-    <footer className="footer">
-      <div className="footer-inner">
-        <span className="footer-text">
-          Desenvolvido por <strong>{nomeAluno}</strong> &copy; {ano}
-        </span>
-        <span className="footer-tag">Projeto React</span>
-      </div>
-    </footer>
-  );
-}
+function Footer() {
+    return (
+      <footer style={{ background: "#2c3e50", color: "white", padding: "10px", textAlign: "center", marginTop: "20px" }}>
+        Henrique Tavares Andrade — {new Date().getFullYear()}
+      </footer>
+    );
+  }
+  
+  export default Footer;

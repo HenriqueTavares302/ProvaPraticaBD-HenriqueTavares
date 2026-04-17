@@ -1,91 +1,95 @@
 import { useState, useEffect } from "react";
+import { auth, db } from "./firebase";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { collection, addDoc, onSnapshot } from "firebase/firestore";
 import StatusBar from "./components/StatusBar";
 import Footer from "./components/Footer";
-import AlunoForm from "./components/AlunoForm";
-import AlunoCard from "./components/AlunoCard";
-import educacaoImg from "./assets/educacao.svg";
+import Auth from "./components/auth";
+import imagemEducacao from './assets/educacao.svg'; 
+import "./App.css";
 
-const alunosIniciais = [
-  { id: 1, nome: "Ana Carolina Silva", curso: "Ciência da Computação" },
-  { id: 2, nome: "Bruno Henrique Souza", curso: "Engenharia de Software" },
-  { id: 3, nome: "Carla Mendes", curso: "Sistemas de Informação" },
-];
-
-export default function App() {
-  const [alunos, setAlunos] = useState(alunosIniciais);
-  const [mostrarForm, setMostrarForm] = useState(false);
+function App() {
+  const [usuario, setUsuario] = useState(null);
+  const [alunos, setAlunos] = useState([]);
+  const [nome, setNome] = useState("");
+  const [curso, setCurso] = useState("");
+  const [erro, setErro] = useState("");
 
   useEffect(() => {
-    console.log("✅ Sistema Acadêmico carregado com sucesso!");
-    console.log(`📚 Total de alunos cadastrados: ${alunos.length}`);
+    const unsub = onAuthStateChanged(auth, (user) => {
+      setUsuario(user);
+      console.log(user ? "Usuário logado: " + user.email : "Sem usuário logado");
+    });
+    return () => unsub();
   }, []);
 
   useEffect(() => {
-    console.log(`🔄 Lista de alunos atualizada. Total: ${alunos.length}`);
-  }, [alunos]);
+    if (!usuario) return;
+    const unsub = onSnapshot(collection(db, "alunos"), (snapshot) => {
+      setAlunos(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+    });
+    return () => unsub();
+  }, [usuario]);
 
-  const adicionarAluno = (novoAluno) => {
-    setAlunos((prev) => [
-      ...prev,
-      { id: Date.now(), ...novoAluno },
-    ]);
-    setMostrarForm(false);
-  };
+  async function adicionarAluno() {
+    if (!nome || !curso) return setErro("Preencha nome e curso.");
+    await addDoc(collection(db, "alunos"), { nome, curso });
+    setNome("");
+    setCurso("");
+    setErro("");
+  }
 
-  const removerAluno = (id) => {
-    setAlunos((prev) => prev.filter((a) => a.id !== id));
-  };
+  async function logout() {
+    await signOut(auth);
+  }
 
   return (
-    <div className="app">
-      <StatusBar mensagem="Sistema Acadêmico" totalAlunos={alunos.length} />
+    <div className="app-container">
+      <StatusBar mensagem="Sistema Acadêmico" />
 
-      <main className="main">
-        <section className="hero">
-          <div className="hero-text">
-            <h1>Gestão de <span className="accent">Alunos</span></h1>
-            <p>Gerencie sua turma com facilidade. Adicione, visualize e organize os alunos cadastrados.</p>
-            <button
-              className="btn-primary"
-              onClick={() => setMostrarForm(!mostrarForm)}
-            >
-              {mostrarForm ? "✕ Cancelar" : "+ Adicionar Aluno"}
-            </button>
-          </div>
-          <div className="hero-img">
-            <img src={educacaoImg} alt="Ilustração de educação" />
-          </div>
-        </section>
+      <main className="main-content">
+  <div className="image-wrapper">
+    <img src={imagemEducacao} alt="Educação" />
+  </div>
 
-        {mostrarForm && (
-          <AlunoForm onAdicionar={adicionarAluno} />
-        )}
-
-        <section className="lista-section">
-          <div className="lista-header">
-            <h2>Alunos Matriculados</h2>
-            <span className="badge">{alunos.length}</span>
-          </div>
-
-          {alunos.length === 0 ? (
-            <div className="vazio">
-              <p>Nenhum aluno cadastrado ainda.</p>
+        {!usuario ? (
+          <Auth />
+        ) : (
+          <>
+            <div className="user-info">
+              <p>Logado como: <strong>{usuario.email}</strong></p>
+              <button className="btn-logout" onClick={logout}>Sair</button>
             </div>
-          ) : (
-            <div className="grid-alunos">
-              {alunos.map((aluno) => (
-                <AlunoCard
-                  key={aluno.id}
-                  aluno={aluno}
-                  onRemover={removerAluno}
-                />
+
+            <h2>Adicionar Aluno</h2>
+            <div className="form-row">
+              <input
+                placeholder="Nome"
+                value={nome}
+                onChange={e => setNome(e.target.value)}
+              />
+              <input
+                placeholder="Curso"
+                value={curso}
+                onChange={e => setCurso(e.target.value)}
+              />
+              <button className="btn-primary" onClick={adicionarAluno}>Adicionar</button>
+            </div>
+            {erro && <p className="erro">{erro}</p>}
+
+            <h2>Lista de Alunos</h2>
+            <ul className="scroll">
+              {alunos.map(aluno => (
+                <li key={aluno.id}>{aluno.nome} — {aluno.curso}</li>
               ))}
-            </div>
-          )}
-        </section>
+            </ul>
+          </>
+        )}
       </main>
 
-      <Footer nomeAluno="Henrique Tavares Andrade" ano={2026} />
+      <Footer />
     </div>
   );
 }
+
+export default App;
