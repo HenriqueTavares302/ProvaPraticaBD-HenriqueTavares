@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 320" fill="none">
+  <!-- Background shapes -->
+  <ellipse cx="210" cy="270" rx="160" ry="20" fill="#3B82F610"/>
+
+  <!-- Book stack -->
+  <rect x="100" y="190" width="160" height="22" rx="4" fill="#3B82F6"/>
+  <rect x="108" y="168" width="144" height="22" rx="4" fill="#8B5CF6"/>
+  <rect x="116" y="148" width="128" height="20" rx="4" fill="#10B981"/>
+
+  <!-- Open book on top -->
+  <path d="M130 100 Q180 85 180 148 L130 148 Z" fill="#F8FAFC" stroke="#3B82F6" stroke-width="1.5"/>
+  <path d="M230 100 Q180 85 180 148 L230 148 Z" fill="#F8FAFC" stroke="#3B82F6" stroke-width="1.5"/>
+  <line x1="180" y1="88" x2="180" y2="148" stroke="#3B82F6" stroke-width="1.5"/>
+  <!-- Lines on pages -->
+  <line x1="145" y1="112" x2="172" y2="112" stroke="#CBD5E1" stroke-width="1.5"/>
+  <line x1="145" y1="120" x2="172" y2="120" stroke="#CBD5E1" stroke-width="1.5"/>
+  <line x1="145" y1="128" x2="165" y2="128" stroke="#CBD5E1" stroke-width="1.5"/>
+  <line x1="188" y1="112" x2="215" y2="112" stroke="#CBD5E1" stroke-width="1.5"/>
+  <line x1="188" y1="120" x2="215" y2="120" stroke="#CBD5E1" stroke-width="1.5"/>
+  <line x1="188" y1="128" x2="208" y2="128" stroke="#CBD5E1" stroke-width="1.5"/>
+
+  <!-- Graduation cap -->
+  <rect x="165" y="60" width="30" height="4" rx="2" fill="#1E293B"/>
+  <polygon points="180,40 210,58 180,66 150,58" fill="#1E293B"/>
+  <line x1="210" y1="58" x2="210" y2="75" stroke="#1E293B" stroke-width="2"/>
+  <circle cx="210" cy="77" r="4" fill="#F59E0B"/>
+
+  <!-- Stars -->
+  <circle cx="290" cy="80" r="4" fill="#F59E0B" opacity="0.8"/>
+  <circle cx="310" cy="60" r="3" fill="#3B82F6" opacity="0.7"/>
+  <circle cx="270" cy="55" r="2.5" fill="#10B981" opacity="0.8"/>
+  <circle cx="330" cy="100" r="2" fill="#8B5CF6" opacity="0.6"/>
+  <circle cx="80" cy="90" r="3" fill="#F59E0B" opacity="0.7"/>
+  <circle cx="60" cy="120" r="2" fill="#3B82F6" opacity="0.5"/>
+
+  <!-- Pencil -->
+  <rect x="300" y="140" width="8" height="60" rx="2" fill="#F59E0B" transform="rotate(20, 304, 170)"/>
+  <polygon points="300,196 308,196 304,210" fill="#1E293B" transform="rotate(20, 304, 170)"/>
+  <rect x="300" y="140" width="8" height="8" rx="1" fill="#EF4444" transform="rotate(20, 304, 170)"/>
+</svg>
