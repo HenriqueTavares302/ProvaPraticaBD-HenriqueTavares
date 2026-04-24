@@ -11,25 +11,15 @@ function Auth() {
   const [senha, setSenha] = useState("");
   const [erro, setErro] = useState("");
   const [modoCadastro, setModoCadastro] = useState(false);
-  const [aguardandoVerificacao, setAguardandoVerificacao] = useState(false);
 
   async function cadastrar() {
     if (!email || !senha) return setErro("Preencha todos os campos.");
     try {
       const resultado = await createUserWithEmailAndPassword(auth, email, senha);
-      try {
-        await sendEmailVerification(resultado.user, {
-          url: "https://provapratica-bd.web.app"
-        });
-      } catch (emailErro) {
-        console.log("Erro ao enviar email:", emailErro.code);
-        // continua mesmo se o envio falhar
-      }
-      await auth.signOut();
-      setAguardandoVerificacao(true);
+      await sendEmailVerification(resultado.user);
+      alert("Cadastro realizado! Verifique seu e-mail antes de continuar.");
       setErro("");
     } catch (e) {
-      console.log("ERRO:", e.code);
       setErro(traduzirErro(e.code));
     }
   }
@@ -38,11 +28,13 @@ function Auth() {
     if (!email || !senha) return setErro("Preencha todos os campos.");
     try {
       const resultado = await signInWithEmailAndPassword(auth, email, senha);
+
       if (!resultado.user.emailVerified) {
         setErro("E-mail não verificado. Verifique sua caixa de entrada.");
-        await auth.signOut();
+        await auth.signOut(); // bloqueia o acesso
         return;
       }
+
       setErro("");
     } catch (e) {
       setErro(traduzirErro(e.code));
@@ -58,21 +50,6 @@ function Auth() {
       case "auth/user-not-found": return "Usuário não encontrado!";
       default: return "Erro de autenticação.";
     }
-  }
-
-  if (aguardandoVerificacao) {
-    return (
-      <div style={{ padding: "20px", textAlign: "center" }}>
-        <h2>📧 Confirme seu e-mail</h2>
-        <p>Enviamos um link de verificação para:</p>
-        <strong>{email}</strong>
-        <p>Acesse sua caixa de entrada e clique no link para confirmar que é você.</p>
-        <p style={{ color: "gray", fontSize: "14px" }}>Após confirmar, volte aqui e faça login.</p>
-        <button onClick={() => { setAguardandoVerificacao(false); setModoCadastro(false); }}>
-          Já confirmei, fazer login
-        </button>
-      </div>
-    );
   }
 
   return (
