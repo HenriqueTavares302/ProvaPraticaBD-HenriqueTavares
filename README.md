@@ -1,146 +1,222 @@
-# 📚 Projeto React + Vite + Firebase (Firestore)
+# 🦸 Projeto Super-Heróis
 
-Este é um projeto desenvolvido utilizando **React**, **Vite** e **Firebase (Firestore)**, com o objetivo de criar uma aplicação web moderna, rápida e integrada a um banco de dados em tempo real.
-
----
-
-## 🚀 Tecnologias utilizadas
-
-* ⚛️ React
-* ⚡ Vite
-* 🔥 Firebase
-* 🗄️ Firestore (Banco de dados NoSQL em tempo real)
-* 🎨 CSS
+Sistema desenvolvido para cadastro e gerenciamento de personagens de super-heróis utilizando **Firebase** e **Supabase**.
+A aplicação permite criar personagens, fazer upload de imagens, armazenar dados em nuvem e visualizar informações dos heróis cadastrados.
 
 ---
 
-## 📁 Estrutura do Projeto
+# 🚀 Tecnologias Utilizadas
 
-```
-vite-project/
-│
-├── src/
-│   ├── components/
-│   ├── assets/
-│   ├── App.jsx
-│   ├── main.jsx
-│
-├── public/
-├── package.json
-├── vite.config.js
-```
+* React.js
+* Firebase
+* Supabase
+* JavaScript
+* HTML5
+* CSS3
 
 ---
 
-## ⚙️ Pré-requisitos
+# 📌 Funcionalidades
 
-Antes de começar, você precisa ter instalado em sua máquina:
-
-* Node.js (versão recomendada: 18+)
-* npm ou yarn
+* ✅ Cadastro de super-heróis
+* ✅ Upload de imagens dos personagens
+* ✅ Armazenamento em nuvem
+* ✅ Listagem de heróis
+* ✅ Edição de informações
+* ✅ Exclusão de personagens
+* ✅ Integração entre Firebase e Supabase
 
 ---
 
-## 🔧 Instalação
-
-1. Clone o repositório:
+# 🗂️ Estrutura do Projeto
 
 ```bash
-git clone <URL_DO_REPOSITORIO>
+src/
+ ├── components/
+ ├── pages/
+ ├── services/
+ ├── firebase/
+ ├── supabase/
+ ├── assets/
+ └── App.jsx
 ```
 
-2. Acesse a pasta do projeto:
+---
+
+# 🔥 Firebase
+
+O Firebase é utilizado para:
+
+* Autenticação
+* Banco de dados
+* Configurações do projeto
+
+## Configuração
+
+Crie um arquivo:
 
 ```bash
-cd vite-project
+firebaseConfig.js
 ```
 
-3. Instale as dependências:
+Exemplo:
+
+```javascript
+import { initializeApp } from "firebase/app";
+
+const firebaseConfig = {
+  apiKey: "SUA_API_KEY",
+  authDomain: "SEU_DOMINIO",
+  projectId: "SEU_PROJECT_ID",
+  storageBucket: "SEU_BUCKET",
+  messagingSenderId: "SEU_ID",
+  appId: "SEU_APP_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+
+export default app;
+```
+
+---
+
+# ☁️ Supabase
+
+O Supabase é utilizado para:
+
+* Upload de imagens
+* Armazenamento de arquivos
+* Gerenciamento do bucket
+
+## Configuração
+
+Instale a biblioteca:
+
+```bash
+npm install @supabase/supabase-js
+```
+
+Crie o arquivo:
+
+```bash
+supabaseClient.js
+```
+
+Exemplo:
+
+```javascript
+import { createClient } from '@supabase/supabase-js'
+
+const supabaseUrl = 'SUA_URL'
+const supabaseKey = 'SUA_CHAVE'
+
+export const supabase = createClient(
+  supabaseUrl,
+  supabaseKey
+)
+```
+
+---
+
+# 📦 Instalação
+
+Clone o repositório:
+
+```bash
+git clone https://github.com/seu-usuario/projeto-super-herois.git
+```
+
+Entre na pasta:
+
+```bash
+cd projeto-super-herois
+```
+
+Instale as dependências:
 
 ```bash
 npm install
 ```
 
----
-
-## ▶️ Como executar o projeto
-
-Após instalar tudo, execute o seguinte comando dentro da pasta **vite-project**:
+Execute o projeto:
 
 ```bash
 npm run dev
 ```
 
-Depois disso, o projeto estará disponível em:
-
-```
-http://localhost:5173
-```
-
 ---
 
-## 🔥 Configuração do Firebase
+# 🖼️ Upload de Imagens
 
-Para utilizar o Firestore, você precisa configurar o Firebase:
+As imagens dos personagens são armazenadas em buckets no Supabase.
 
-1. Acesse o site do Firebase
-2. Crie um projeto
-3. Ative o Firestore Database
-4. Copie as credenciais do seu projeto
-5. Crie um arquivo (ex: `firebase.js`) dentro de `src/` com sua configuração:
+Exemplo de upload:
 
 ```javascript
-import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
-
-const firebaseConfig = {
-  apiKey: "SUA_API_KEY",
-  authDomain: "SEU_AUTH_DOMAIN",
-  projectId: "SEU_PROJECT_ID",
-  storageBucket: "SEU_STORAGE_BUCKET",
-  messagingSenderId: "SEU_SENDER_ID",
-  appId: "SEU_APP_ID"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-export { db };
+const { data, error } = await supabase.storage
+  .from('superheroes')
+  .upload(`personagens/${file.name}`, file)
 ```
 
 ---
 
-## 📌 Funcionalidades
+# 📄 Exemplo de Personagem
 
-* Cadastro de dados no Firestore
-* Leitura de dados em tempo real
-* Interface dinâmica com React
-* Build rápido com Vite
+```json
+{
+  "nome": "Batman",
+  "universo": "DC",
+  "poder": "Inteligência e tecnologia",
+  "imagem": "url-da-imagem"
+}
+```
 
 ---
 
-## 📦 Build para produção
+# 🔐 Variáveis de Ambiente
 
-Para gerar a versão de produção:
+Crie um arquivo `.env`:
+
+```env
+VITE_FIREBASE_API_KEY=
+VITE_FIREBASE_AUTH_DOMAIN=
+VITE_FIREBASE_PROJECT_ID=
+
+VITE_SUPABASE_URL=
+VITE_SUPABASE_KEY=
+```
+
+---
+
+# 🎨 Objetivo do Projeto
+
+Este projeto foi criado com o objetivo de praticar:
+
+* Integração entre serviços em nuvem
+* Upload de arquivos
+* CRUD completo
+* Desenvolvimento Front-End moderno
+* Gerenciamento de banco de dados
+
+---
+
+# 📸 Preview
+
+Adicione aqui screenshots do projeto:
 
 ```bash
-npm run build
-```
-
-Para visualizar o build:
-
-```bash
-npm run preview
+/assets/preview.png
 ```
 
 ---
 
-## 👨‍💻 Autor
+# 👨‍💻 Autor
 
-Desenvolvido por **Henrique Tavares**
+Desenvolvido por Henrique Tavares 🚀
 
 ---
 
-## 📄 Licença
+# 📜 Licença
 
 Este projeto está sob a licença MIT.
+
